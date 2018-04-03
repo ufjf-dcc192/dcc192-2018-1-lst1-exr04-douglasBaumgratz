@@ -19,11 +19,33 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet(urlPatterns = {"/JurosComposto.html"})
 public class JurosComposto extends HttpServlet {
 
-    double valor = 5000.0;
+    double valorInicial;
+    double qtdMeses;
+    double taxaJuros;
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
+        String parametroValorInicial = request.getParameter("valInicial");
+        String parametroQtdMeses = request.getParameter("qtdMeses");
+        String parametroTaxaJuros = request.getParameter("taxaJuros");
+
+        if (!"".equals(parametroValorInicial) && parametroValorInicial != null) {
+            valorInicial = Double.parseDouble(parametroValorInicial);
+        } else {
+            valorInicial = 5000.0;
+        }
+        if (!"".equals(parametroQtdMeses) && parametroQtdMeses != null) {
+            qtdMeses = Double.parseDouble(parametroQtdMeses);
+        } else {
+            qtdMeses = 12;
+        }
+        if (!"".equals(parametroTaxaJuros) && parametroTaxaJuros != null) {
+            taxaJuros = Double.parseDouble(parametroTaxaJuros)/100;
+        } else {
+            taxaJuros = 0.01;
+        }
 
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
@@ -41,7 +63,7 @@ public class JurosComposto extends HttpServlet {
             out.println("<label> Taxa de Juros: <input name = 'taxaJuros'/> </label>");
             out.println("<input type = 'submit'/>");
             out.println("<input type = 'reset'/>");
-            
+
             out.println("</form>");
 
             out.println("</body>");

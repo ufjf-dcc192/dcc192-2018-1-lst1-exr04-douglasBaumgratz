@@ -22,6 +22,7 @@ public class JurosComposto extends HttpServlet {
     double valorInicial;
     double qtdMeses;
     double taxaJuros;
+    double totalAcumulado;
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -42,10 +43,12 @@ public class JurosComposto extends HttpServlet {
             qtdMeses = 12;
         }
         if (!"".equals(parametroTaxaJuros) && parametroTaxaJuros != null) {
-            taxaJuros = Double.parseDouble(parametroTaxaJuros)/100;
+            taxaJuros = Double.parseDouble(parametroTaxaJuros) / 100;
         } else {
             taxaJuros = 0.01;
         }
+
+        totalAcumulado = valorInicial * Math.pow(1 + taxaJuros, qtdMeses);
 
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
@@ -63,7 +66,13 @@ public class JurosComposto extends HttpServlet {
             out.println("<label> Taxa de Juros: <input name = 'taxaJuros'/> </label>");
             out.println("<input type = 'submit'/>");
             out.println("<input type = 'reset'/>");
+            out.println("</form>");
 
+            out.println("<p> Para um investimento inicial de R$"
+                    + valorInicial + " a uma taxa de juros compostos de "
+                    + taxaJuros + " ao mês, você terá R$"
+                    + totalAcumulado + " ao final de "
+                    + qtdMeses + " meses! </p>");
             out.println("</form>");
 
             out.println("</body>");

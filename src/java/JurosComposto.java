@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 
+import static java.awt.Color.BLACK;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -23,6 +24,7 @@ public class JurosComposto extends HttpServlet {
     double qtdMeses;
     double taxaJuros;
     double totalAcumulado;
+    double rendimentoMensal;
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -49,6 +51,7 @@ public class JurosComposto extends HttpServlet {
         }
 
         totalAcumulado = valorInicial * Math.pow(1 + taxaJuros, qtdMeses);
+        rendimentoMensal = (totalAcumulado - valorInicial) / qtdMeses;
 
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
@@ -73,7 +76,12 @@ public class JurosComposto extends HttpServlet {
                     + taxaJuros + " ao mês, você terá R$"
                     + totalAcumulado + " ao final de "
                     + qtdMeses + " meses! </p>");
-            out.println("</form>");
+
+            if (rendimentoMensal > 200) {
+                out.printf("<h1 style='color:green'> Bom negócio! </h1>");
+            } else {
+                out.printf("<h1 style='color:red'> Mau negócio! </h1>");
+            }
 
             out.println("</body>");
             out.println("</html>");
